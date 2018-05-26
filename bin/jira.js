@@ -26,8 +26,9 @@ requirejs([
     '../lib/jira/watch',
     '../lib/jira/add_to_sprint',
     '../lib/jira/new',
-    '../lib/jira/edit'
-], function (program, config, auth, ls, describe, assign, comment, create, sprint, transitions, worklog, link, watch, add_to_sprint, new_create, edit) {
+    '../lib/jira/edit',
+    '../lib/jira/attachment'    
+], function (program, config, auth, ls, describe, assign, comment, create, sprint, transitions, worklog, link, watch, add_to_sprint, new_create, edit, attachment) {
 
     function finalCb(err) {
       if(err){
@@ -187,6 +188,17 @@ requirejs([
             });
         });
 
+    program
+        .command('attach <issue> <path>')
+        .description('attach file to issue')
+        .action(function (issue, path) {
+            auth.setConfig(function (auth) {
+                if (auth) {
+                    attachment.attach(issue, path, finalCb);
+                }
+            });
+        });
+    
     program
         .command('search <term>')
         .description('Find issues.')
